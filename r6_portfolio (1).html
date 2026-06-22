@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Border's R6 Animation Portfolio</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@400;600;700&family=Inter:wght@300;400;500&display=swap');
+
+  :root {
+    --bg:        #0b0d12;
+    --surface:   #12151d;
+    --card:      #181c27;
+    --border:    #252a38;
+    --neon:      #00e5ff;
+    --neon-dim:  rgba(0,229,255,0.12);
+    --neon-glow: rgba(0,229,255,0.35);
+    --accent2:   #ff4fcb;
+    --text:      #e2e8f0;
+    --muted:     #64748b;
+    --danger:    #ff5050;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.07) 2px, rgba(0,0,0,0.07) 4px);
+    pointer-events: none;
+    z-index: 1000;
+  }
+
+  /* NAV */
+  nav {
+    position: sticky; top: 0; z-index: 200;
+    background: rgba(11,13,18,0.88);
+    backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+    height: 60px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .nav-logo {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 1.05rem;
+    color: var(--neon);
+    letter-spacing: 0.08em;
+    text-shadow: 0 0 14px var(--neon-glow);
+  }
+  .nav-logo span { color: var(--accent2); }
+  .nav-links { display: flex; gap: 1.6rem; }
+  .nav-links a {
+    font-size: 0.78rem;
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--neon); }
+
+  /* HERO */
+  .hero {
+    position: relative;
+    padding: 6rem 2rem 4.5rem;
+    text-align: center;
+    overflow: hidden;
+  }
+  .hero-grid {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(var(--border) 1px, transparent 1px),
+      linear-gradient(90deg, var(--border) 1px, transparent 1px);
+    background-size: 48px 48px;
+    mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 20%, transparent 100%);
+    opacity: 0.45;
+  }
+  .hero-eyebrow {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.28em;
+    color: var(--neon);
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+    opacity: 0.85;
+  }
+  .hero h1 {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: clamp(2.8rem, 7vw, 5.5rem);
+    font-weight: 700;
+    line-height: 1.02;
+    margin-bottom: 1.2rem;
+  }
+  .hero h1 .line1 { display: block; color: var(--text); }
+  .hero h1 .line2 {
+    display: block;
+    color: transparent;
+    -webkit-text-stroke: 1.5px var(--neon);
+  }
+  .hero-sub {
+    font-size: 0.92rem;
+    color: var(--muted);
+    max-width: 440px;
+    margin: 0 auto 2rem;
+    line-height: 1.75;
+    font-weight: 300;
+  }
+
+  /* STATS BAR */
+  .stats-bar {
+    max-width: 860px; margin: 0 auto;
+    padding: 0 1.5rem;
+    display: flex; gap: 2.5rem;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    background: var(--surface);
+  }
+  .stat { padding: 1rem 0; display: flex; flex-direction: column; gap: 0.15rem; }
+  .stat-value {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 1.35rem;
+    color: var(--neon);
+  }
+  .stat-label {
+    font-size: 0.67rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+  }
+
+  /* UPLOAD SECTION */
+  #upload-section {
+    max-width: 860px; margin: 0 auto;
+    padding: 0 1.5rem 4rem;
+  }
+  .section-header {
+    display: flex; align-items: center; gap: 1rem;
+    margin: 3rem 0 1.5rem;
+  }
+  .section-header h2 {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 1.25rem; font-weight: 700;
+    letter-spacing: 0.12em; text-transform: uppercase;
+  }
+  .section-header .line {
+    flex: 1; height: 1px;
+    background: linear-gradient(to right, var(--border), transparent);
+  }
+  .section-header .count {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.7rem; color: var(--neon);
+    letter-spacing: 0.1em;
+  }
+
+  .upload-zone {
+    border: 2px dashed var(--border);
+    border-radius: 12px;
+    padding: 3rem 2rem;
+    text-align: center;
+    background: var(--surface);
+    cursor: pointer;
+    transition: border-color 0.25s, background 0.25s, box-shadow 0.25s;
+    position: relative;
+  }
+  .upload-zone:hover, .upload-zone.drag-over {
+    border-color: var(--neon);
+    background: var(--neon-dim);
+    box-shadow: 0 0 40px rgba(0,229,255,0.07);
+  }
+  .upload-zone input[type="file"] {
+    position: absolute; inset: 0;
+    opacity: 0; cursor: pointer; width: 100%; height: 100%;
+  }
+  .upload-icon { font-size: 2.8rem; margin-bottom: 0.8rem; }
+  .upload-zone h3 {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 1.12rem; font-weight: 700;
+    letter-spacing: 0.06em; margin-bottom: 0.4rem;
+  }
+  .upload-zone p { font-size: 0.78rem; color: var(--muted); }
+  .badge {
+    display: inline-block;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.62rem; padding: 0.18rem 0.5rem;
+    border-radius: 4px; border: 1px solid var(--border);
+    color: var(--muted); margin: 0.25rem 0.15rem;
+    letter-spacing: 0.07em;
+  }
+
+  /* PORTFOLIO GRID */
+  #portfolio-section {
+    max-width: 1100px; margin: 0 auto;
+    padding: 0 1.5rem 6rem;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.2rem;
+  }
+  .empty-state {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 4rem 1rem;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: var(--surface);
+  }
+  .empty-state .icon { font-size: 2.5rem; margin-bottom: 1rem; opacity: 0.35; }
+  .empty-state p { color: var(--muted); font-size: 0.85rem; line-height: 1.65; }
+
+  /* CARD */
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px; overflow: hidden;
+    display: flex; flex-direction: column;
+    transition: border-color 0.25s, box-shadow 0.25s, transform 0.2s;
+  }
+  .card:hover {
+    border-color: rgba(0,229,255,0.38);
+    box-shadow: 0 0 28px rgba(0,229,255,0.06), 0 8px 24px rgba(0,0,0,0.4);
+    transform: translateY(-3px);
+  }
+  .card-media {
+    position: relative; width: 100%;
+    aspect-ratio: 16/9; background: #0d1018;
+    overflow: hidden; cursor: pointer;
+  }
+  .card-media img, .card-media video {
+    width: 100%; height: 100%; object-fit: cover; display: block;
+  }
+  .card-media .play-overlay {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    background: rgba(0,0,0,0.42);
+    opacity: 0; transition: opacity 0.2s; font-size: 2.2rem;
+  }
+  .card-media:hover .play-overlay { opacity: 1; }
+  .type-badge {
+    position: absolute; top: 10px; left: 10px;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.58rem; letter-spacing: 0.1em;
+    padding: 0.18rem 0.5rem; border-radius: 4px;
+    text-transform: uppercase; pointer-events: none;
+  }
+  .tb-gif  { background: rgba(255,79,203,0.18); color: var(--accent2); border: 1px solid rgba(255,79,203,0.3); }
+  .tb-mp4  { background: rgba(0,229,255,0.12);  color: var(--neon);    border: 1px solid rgba(0,229,255,0.25); }
+  .tb-webm { background: rgba(255,160,0,0.12);  color: #ffa000;        border: 1px solid rgba(255,160,0,0.25); }
+  .tb-img  { background: rgba(200,200,200,0.08); color: #9aa; border: 1px solid rgba(200,200,200,0.12); }
+
+  .card-body {
+    padding: 0.9rem 1rem; flex: 1;
+    display: flex; flex-direction: column; gap: 0.45rem;
+  }
+  .name-row { display: flex; align-items: center; gap: 0.4rem; }
+  .card-name {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 1rem; font-weight: 700;
+    letter-spacing: 0.04em; flex: 1;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .card-name[contenteditable="true"] {
+    outline: none;
+    border-bottom: 1px solid var(--neon);
+    color: var(--neon); white-space: normal;
+  }
+  .icon-btn {
+    background: none; border: none;
+    color: var(--muted); cursor: pointer; font-size: 0.8rem;
+    padding: 0.15rem 0.3rem; border-radius: 4px;
+    transition: color 0.2s, background 0.2s;
+    line-height: 1;
+  }
+  .icon-btn:hover { color: var(--neon); background: var(--neon-dim); }
+  .card-desc {
+    font-size: 0.77rem; color: var(--muted); line-height: 1.55; flex: 1;
+  }
+  .card-desc[contenteditable="true"] {
+    outline: none; border-bottom: 1px dashed var(--border);
+    color: var(--text); cursor: text;
+  }
+  .card-footer {
+    display: flex; justify-content: flex-end; gap: 0.4rem;
+    padding: 0.55rem 0.9rem;
+    border-top: 1px solid var(--border);
+  }
+  .btn-sm {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 0.7rem; font-weight: 600;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    padding: 0.28rem 0.7rem; border-radius: 5px;
+    border: none; cursor: pointer; transition: all 0.2s;
+  }
+  .btn-del  { background: rgba(255,80,80,0.1);  color: var(--danger); }
+  .btn-del:hover  { background: rgba(255,80,80,0.22); }
+  .btn-view { background: var(--neon-dim); color: var(--neon); border: 1px solid rgba(0,229,255,0.18); }
+  .btn-view:hover { background: rgba(0,229,255,0.22); }
+
+  /* MODAL */
+  .modal-overlay {
+    display: none; position: fixed; inset: 0; z-index: 500;
+    background: rgba(0,0,0,0.82);
+    backdrop-filter: blur(8px);
+    align-items: center; justify-content: center;
+  }
+  .modal-overlay.active { display: flex; }
+  .modal {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    max-width: 840px; width: 93vw;
+    max-height: 91vh; overflow: hidden;
+    display: flex; flex-direction: column;
+    box-shadow: 0 0 80px rgba(0,229,255,0.07);
+  }
+  .modal-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1rem 1.4rem; border-bottom: 1px solid var(--border);
+  }
+  .modal-title {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 1.05rem; font-weight: 700; letter-spacing: 0.06em;
+  }
+  .modal-close {
+    background: none; border: none; color: var(--muted);
+    font-size: 1.1rem; cursor: pointer; transition: color 0.2s;
+  }
+  .modal-close:hover { color: var(--text); }
+  .modal-body {
+    flex: 1; overflow: auto;
+    display: flex; align-items: center; justify-content: center;
+    background: #090b0f; min-height: 260px; padding: 1rem;
+  }
+  .modal-body img, .modal-body video {
+    max-width: 100%; max-height: 72vh; object-fit: contain;
+    border-radius: 6px;
+  }
+
+  /* TOAST */
+  #toast {
+    position: fixed; bottom: 1.8rem; right: 1.8rem; z-index: 800;
+    background: var(--card); border: 1px solid var(--neon);
+    color: var(--neon);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.72rem; letter-spacing: 0.05em;
+    padding: 0.6rem 1.1rem; border-radius: 6px;
+    box-shadow: 0 0 22px rgba(0,229,255,0.18);
+    transform: translateY(16px); opacity: 0;
+    transition: all 0.3s; pointer-events: none;
+  }
+  #toast.show { transform: translateY(0); opacity: 1; }
+
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+  @media (max-width: 600px) {
+    .nav-links { display: none; }
+    .hero { padding: 3.5rem 1rem 3rem; }
+    .stats-bar { gap: 1.2rem; flex-wrap: wrap; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">BORDER<span>::</span>R6</div>
+  <div class="nav-links">
+    <a href="#upload-section">Upload</a>
+    <a href="#portfolio-section">Showcase</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-eyebrow">Roblox R6 · Animation Portfolio</div>
+  <h1>
+    <span class="line1">Border's</span>
+    <span class="line2">R6 ANIMATIONS.</span>
+  </h1>
+  <p class="hero-sub">A showcase of Border's R6 animation work — from idles and walks to combat and custom rigs.</p>
+</section>
+
+<!-- STATS BAR -->
+<div class="stats-bar">
+  <div class="stat">
+    <div class="stat-value" id="stat-count">0</div>
+    <div class="stat-label">Total</div>
+  </div>
+  <div class="stat">
+    <div class="stat-value" id="stat-videos">0</div>
+    <div class="stat-label">Videos</div>
+  </div>
+  <div class="stat">
+    <div class="stat-value" id="stat-gifs">0</div>
+    <div class="stat-label">GIFs</div>
+  </div>
+  <div class="stat">
+    <div class="stat-value" id="stat-imgs">0</div>
+    <div class="stat-label">Images</div>
+  </div>
+</div>
+
+<!-- UPLOAD -->
+<section id="upload-section">
+  <div class="section-header">
+    <h2>Upload</h2>
+    <div class="line"></div>
+  </div>
+  <div class="upload-zone" id="upload-zone">
+    <input type="file" id="file-input" multiple accept="image/*,video/*" />
+    <div class="upload-icon">📁</div>
+    <h3>Drop files here or click to browse</h3>
+    <p>Upload your animation previews and clips</p>
+    <div style="margin-top:0.9rem;">
+      <span class="badge">GIF</span>
+      <span class="badge">MP4</span>
+      <span class="badge">WEBM</span>
+      <span class="badge">PNG</span>
+      <span class="badge">JPG</span>
+    </div>
+  </div>
+</section>
+
+<!-- PORTFOLIO -->
+<section id="portfolio-section">
+  <div class="section-header">
+    <h2>Showcase</h2>
+    <div class="line"></div>
+    <span class="count" id="grid-count">0 items</span>
+  </div>
+  <div class="grid" id="grid">
+    <div class="empty-state" id="empty-state">
+      <div class="icon">🎮</div>
+      <p>No animations uploaded yet.<br>Add your first R6 animation above.</p>
+    </div>
+  </div>
+</section>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modal">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="modal-header">
+      <span class="modal-title" id="modal-title">Preview</span>
+      <button class="modal-close" id="modal-close-btn">✕</button>
+    </div>
+    <div class="modal-body" id="modal-body"></div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div id="toast"></div>
+
+<script>
+  let items = [];
+
+  const grid       = document.getElementById('grid');
+  const emptyState = document.getElementById('empty-state');
+  const gridCount  = document.getElementById('grid-count');
+  const statCount  = document.getElementById('stat-count');
+  const statVideos = document.getElementById('stat-videos');
+  const statGifs   = document.getElementById('stat-gifs');
+  const statImgs   = document.getElementById('stat-imgs');
+  const modal      = document.getElementById('modal');
+  const modalTitle = document.getElementById('modal-title');
+  const modalBody  = document.getElementById('modal-body');
+  const toast      = document.getElementById('toast');
+
+  // Drag & drop
+  const zone = document.getElementById('upload-zone');
+  zone.addEventListener('dragover',  e => { e.preventDefault(); zone.classList.add('drag-over'); });
+  zone.addEventListener('dragleave', ()  => zone.classList.remove('drag-over'));
+  zone.addEventListener('drop', e => {
+    e.preventDefault();
+    zone.classList.remove('drag-over');
+    handleFiles(e.dataTransfer.files);
+  });
+  document.getElementById('file-input').addEventListener('change', e => {
+    handleFiles(e.target.files);
+    e.target.value = '';
+  });
+
+  function handleFiles(files) {
+    [...files].forEach(file => {
+      if (!file.type.startsWith('image/') && !file.type.startsWith('video/')) return;
+      const url  = URL.createObjectURL(file);
+      const name = file.name.replace(/\.[^.]+$/, '').replace(/[_-]/g, ' ');
+      let type;
+      if (file.type.startsWith('video/')) {
+        type = file.type.includes('webm') ? 'webm' : 'mp4';
+      } else {
+        type = file.type.includes('gif') ? 'gif' : 'img';
+      }
+      const item = {
+        id: Date.now() + '_' + Math.random().toString(36).slice(2),
+        url, name, type, file,
+        desc: 'Click ✎ to add a description.'
+      };
+      items.push(item);
+    });
+    renderGrid();
+    showToast(`${files.length} file${files.length > 1 ? 's' : ''} added`);
+  }
+
+  function renderGrid() {
+    // Remove all cards (keep empty state in DOM)
+    [...grid.querySelectorAll('.card')].forEach(c => c.remove());
+
+    const counts = { videos: 0, gifs: 0, imgs: 0 };
+    items.forEach(item => {
+      if (item.type === 'mp4' || item.type === 'webm') counts.videos++;
+      else if (item.type === 'gif') counts.gifs++;
+      else counts.imgs++;
+    });
+
+    statCount.textContent  = items.length;
+    statVideos.textContent = counts.videos;
+    statGifs.textContent   = counts.gifs;
+    statImgs.textContent   = counts.imgs;
+    gridCount.textContent  = `${items.length} item${items.length !== 1 ? 's' : ''}`;
+
+    if (items.length === 0) {
+      emptyState.style.display = '';
+      return;
+    }
+    emptyState.style.display = 'none';
+
+    items.forEach(item => {
+      const card = document.createElement('div');
+      card.className = 'card';
+      card.dataset.id = item.id;
+
+      // Badge CSS class
+      const tbClass = { mp4: 'tb-mp4', webm: 'tb-webm', gif: 'tb-gif', img: 'tb-img' }[item.type];
+      const typeLabel = item.type.toUpperCase();
+
+      // Media
+      let mediaInner = '';
+      if (item.type === 'mp4' || item.type === 'webm') {
+        mediaInner = `<video src="${item.url}" muted loop playsinline preload="metadata"></video>
+                      <div class="play-overlay">▶</div>`;
+      } else {
+        mediaInner = `<img src="${item.url}" alt="${item.name}" loading="lazy" />`;
+        if (item.type === 'gif') {
+          mediaInner += `<div class="play-overlay">GIF</div>`;
+        }
+      }
+
+      card.innerHTML = `
+        <div class="card-media" data-id="${item.id}">
+          ${mediaInner}
+          <span class="type-badge ${tbClass}">${typeLabel}</span>
+        </div>
+        <div class="card-body">
+          <div class="name-row">
+            <div class="card-name" data-field="name" data-id="${item.id}">${escHtml(item.name)}</div>
+            <button class="icon-btn" data-edit="name" data-id="${item.id}" title="Edit name">✎</button>
+          </div>
+          <div class="card-desc" data-field="desc" data-id="${item.id}">${escHtml(item.desc)}</div>
+          <button class="icon-btn" style="align-self:flex-start;" data-edit="desc" data-id="${item.id}" title="Edit description">✎ Edit description</button>
+        </div>
+        <div class="card-footer">
+          <button class="btn-sm btn-view" data-preview="${item.id}">Preview</button>
+          <button class="btn-sm btn-del"  data-delete="${item.id}">Remove</button>
+        </div>
+      `;
+
+      grid.appendChild(card);
+    });
+
+    // Video hover play
+    grid.querySelectorAll('.card-media').forEach(media => {
+      const vid = media.querySelector('video');
+      if (!vid) return;
+      media.addEventListener('mouseenter', () => vid.play());
+      media.addEventListener('mouseleave', () => { vid.pause(); vid.currentTime = 0; });
+    });
+  }
+
+  // Event delegation
+  grid.addEventListener('click', e => {
+    // Preview media
+    const previewId = e.target.dataset.preview || e.target.closest('[data-preview]')?.dataset.preview;
+    if (previewId) { openModal(previewId); return; }
+
+    // Also clicking on the card-media opens preview
+    const mediaEl = e.target.closest('.card-media');
+    if (mediaEl) { openModal(mediaEl.dataset.id); return; }
+
+    // Delete
+    const delId = e.target.dataset.delete;
+    if (delId) {
+      items = items.filter(i => i.id !== delId);
+      renderGrid();
+      showToast('Item removed');
+      return;
+    }
+
+    // Edit
+    const editField = e.target.dataset.edit;
+    const editId    = e.target.dataset.id;
+    if (editField && editId) {
+      const el = grid.querySelector(`[data-field="${editField}"][data-id="${editId}"]`);
+      if (!el) return;
+      if (el.contentEditable === 'true') {
+        el.contentEditable = 'false';
+        const item = items.find(i => i.id === editId);
+        if (item) item[editField] = el.textContent.trim() || el.textContent;
+        e.target.textContent = editField === 'name' ? '✎' : '✎ Edit description';
+      } else {
+        el.contentEditable = 'true';
+        el.focus();
+        // Move cursor to end
+        const range = document.createRange();
+        range.selectNodeContents(el);
+        range.collapse(false);
+        const sel = window.getSelection();
+        sel.removeAllRanges();
+        sel.addRange(range);
+        e.target.textContent = editField === 'name' ? '✓' : '✓ Save';
+      }
+    }
+  });
+
+  function openModal(id) {
+    const item = items.find(i => i.id === id);
+    if (!item) return;
+    modalTitle.textContent = item.name;
+    modalBody.innerHTML = '';
+    if (item.type === 'mp4' || item.type === 'webm') {
+      const v = document.createElement('video');
+      v.src = item.url; v.controls = true; v.autoplay = true; v.loop = true;
+      modalBody.appendChild(v);
+    } else {
+      const img = document.createElement('img');
+      img.src = item.url; img.alt = item.name;
+      modalBody.appendChild(img);
+    }
+    modal.classList.add('active');
+  }
+
+  document.getElementById('modal-close-btn').addEventListener('click', () => {
+    modal.classList.remove('active');
+    modalBody.innerHTML = '';
+  });
+  modal.addEventListener('click', e => {
+    if (e.target === modal) {
+      modal.classList.remove('active');
+      modalBody.innerHTML = '';
+    }
+  });
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') {
+      modal.classList.remove('active');
+      modalBody.innerHTML = '';
+    }
+  });
+
+  function showToast(msg) {
+    toast.textContent = msg;
+    toast.classList.add('show');
+    clearTimeout(toast._t);
+    toast._t = setTimeout(() => toast.classList.remove('show'), 2400);
+  }
+
+  function escHtml(str) {
+    return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+</script>
+</body>
+</html>
