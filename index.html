@@ -36,7 +36,6 @@
     z-index: 1000;
   }
 
-  /* NAV */
   nav {
     position: sticky; top: 0; z-index: 200;
     background: rgba(11,13,18,0.88);
@@ -67,7 +66,6 @@
   }
   .nav-links a:hover { color: var(--neon); }
 
-  /* HERO */
   .hero {
     position: relative;
     padding: 6rem 2rem 4.5rem;
@@ -114,7 +112,6 @@
     font-weight: 300;
   }
 
-  /* STATS BAR */
   .stats-bar {
     max-width: 860px; margin: 0 auto;
     padding: 0 1.5rem;
@@ -136,7 +133,6 @@
     letter-spacing: 0.12em;
   }
 
-  /* UPLOAD SECTION */
   #upload-section {
     max-width: 860px; margin: 0 auto;
     padding: 0 1.5rem 4rem;
@@ -175,6 +171,10 @@
     background: var(--neon-dim);
     box-shadow: 0 0 40px rgba(0,229,255,0.07);
   }
+  .upload-zone.uploading {
+    border-color: var(--accent2);
+    pointer-events: none;
+  }
   .upload-zone input[type="file"] {
     position: absolute; inset: 0;
     opacity: 0; cursor: pointer; width: 100%; height: 100%;
@@ -195,7 +195,34 @@
     letter-spacing: 0.07em;
   }
 
-  /* PORTFOLIO GRID */
+  /* Upload progress */
+  .upload-progress {
+    margin-top: 1.2rem;
+    display: none;
+  }
+  .upload-progress.active { display: block; }
+  .progress-bar-wrap {
+    background: var(--border);
+    border-radius: 99px;
+    height: 4px;
+    overflow: hidden;
+    margin-bottom: 0.5rem;
+  }
+  .progress-bar-fill {
+    height: 100%;
+    background: var(--neon);
+    border-radius: 99px;
+    width: 0%;
+    transition: width 0.3s;
+    box-shadow: 0 0 8px var(--neon-glow);
+  }
+  .progress-label {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.68rem;
+    color: var(--neon);
+    letter-spacing: 0.06em;
+  }
+
   #portfolio-section {
     max-width: 1100px; margin: 0 auto;
     padding: 0 1.5rem 6rem;
@@ -216,7 +243,6 @@
   .empty-state .icon { font-size: 2.5rem; margin-bottom: 1rem; opacity: 0.35; }
   .empty-state p { color: var(--muted); font-size: 0.85rem; line-height: 1.65; }
 
-  /* CARD */
   .card {
     background: var(--card);
     border: 1px solid var(--border);
@@ -267,26 +293,19 @@
     letter-spacing: 0.04em; flex: 1;
     white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
   }
-  .card-name[contenteditable="true"] {
-    outline: none;
-    border-bottom: 1px solid var(--neon);
-    color: var(--neon); white-space: normal;
-  }
-  .icon-btn {
-    background: none; border: none;
-    color: var(--muted); cursor: pointer; font-size: 0.8rem;
-    padding: 0.15rem 0.3rem; border-radius: 4px;
-    transition: color 0.2s, background 0.2s;
-    line-height: 1;
-  }
-  .icon-btn:hover { color: var(--neon); background: var(--neon-dim); }
   .card-desc {
     font-size: 0.77rem; color: var(--muted); line-height: 1.55; flex: 1;
   }
-  .card-desc[contenteditable="true"] {
-    outline: none; border-bottom: 1px dashed var(--border);
-    color: var(--text); cursor: text;
+
+  .icon-btn {
+    background: none; border: none;
+    color: var(--muted); cursor: pointer; font-size: 0.85rem;
+    padding: 0.15rem 0.3rem; border-radius: 4px;
+    transition: color 0.2s, background 0.2s; line-height: 1;
+    flex-shrink: 0;
   }
+  .icon-btn:hover { color: var(--neon); background: var(--neon-dim); }
+
   .card-footer {
     display: flex; justify-content: flex-end; gap: 0.4rem;
     padding: 0.55rem 0.9rem;
@@ -304,7 +323,6 @@
   .btn-view { background: var(--neon-dim); color: var(--neon); border: 1px solid rgba(0,229,255,0.18); }
   .btn-view:hover { background: rgba(0,229,255,0.22); }
 
-  /* MODAL */
   .modal-overlay {
     display: none; position: fixed; inset: 0; z-index: 500;
     background: rgba(0,0,0,0.82);
@@ -344,7 +362,6 @@
     border-radius: 6px;
   }
 
-  /* TOAST */
   #toast {
     position: fixed; bottom: 1.8rem; right: 1.8rem; z-index: 800;
     background: var(--card); border: 1px solid var(--neon);
@@ -357,6 +374,7 @@
     transition: all 0.3s; pointer-events: none;
   }
   #toast.show { transform: translateY(0); opacity: 1; }
+  #toast.error { border-color: var(--danger); color: var(--danger); }
 
   ::-webkit-scrollbar { width: 6px; }
   ::-webkit-scrollbar-track { background: var(--bg); }
@@ -371,7 +389,6 @@
 </head>
 <body>
 
-<!-- NAV -->
 <nav>
   <div class="nav-logo">BORDER<span>::</span>R6</div>
   <div class="nav-links">
@@ -380,7 +397,6 @@
   </div>
 </nav>
 
-<!-- HERO -->
 <section class="hero">
   <div class="hero-grid"></div>
   <div class="hero-eyebrow">Roblox R6 · Animation Portfolio</div>
@@ -388,10 +404,9 @@
     <span class="line1">Border's</span>
     <span class="line2">R6 ANIMATIONS.</span>
   </h1>
-  <p class="hero-sub">A showcase of Border's R6 animation work — from idles and walks to combat and custom rigs.</p>
+  <p class="hero-sub">A showcase of Border's R6 animation work.</p>
 </section>
 
-<!-- STATS BAR -->
 <div class="stats-bar">
   <div class="stat">
     <div class="stat-value" id="stat-count">0</div>
@@ -411,7 +426,6 @@
   </div>
 </div>
 
-<!-- UPLOAD -->
 <section id="upload-section">
   <div class="section-header">
     <h2>Upload</h2>
@@ -420,7 +434,7 @@
   <div class="upload-zone" id="upload-zone">
     <input type="file" id="file-input" multiple accept="image/*,video/*" />
     <div class="upload-icon">📁</div>
-    <h3>Drop files here or click to browse</h3>
+    <h3 id="upload-label">Drop files here or click to browse</h3>
     <p>Upload your animation previews and clips</p>
     <div style="margin-top:0.9rem;">
       <span class="badge">GIF</span>
@@ -429,10 +443,15 @@
       <span class="badge">PNG</span>
       <span class="badge">JPG</span>
     </div>
+    <div class="upload-progress" id="upload-progress">
+      <div class="progress-bar-wrap">
+        <div class="progress-bar-fill" id="progress-fill"></div>
+      </div>
+      <div class="progress-label" id="progress-label">Uploading...</div>
+    </div>
   </div>
 </section>
 
-<!-- PORTFOLIO -->
 <section id="portfolio-section">
   <div class="section-header">
     <h2>Showcase</h2>
@@ -447,7 +466,6 @@
   </div>
 </section>
 
-<!-- MODAL -->
 <div class="modal-overlay" id="modal">
   <div class="modal" onclick="event.stopPropagation()">
     <div class="modal-header">
@@ -458,31 +476,57 @@
   </div>
 </div>
 
-<!-- TOAST -->
 <div id="toast"></div>
 
 <script>
+  const CLOUD_NAME    = 'dqzdrd71x';
+  const UPLOAD_PRESET = 'Border Port';
+  const FOLDER        = 'border_r6_portfolio';
+
   let items = [];
 
-  const grid       = document.getElementById('grid');
-  const emptyState = document.getElementById('empty-state');
-  const gridCount  = document.getElementById('grid-count');
-  const statCount  = document.getElementById('stat-count');
-  const statVideos = document.getElementById('stat-videos');
-  const statGifs   = document.getElementById('stat-gifs');
-  const statImgs   = document.getElementById('stat-imgs');
-  const modal      = document.getElementById('modal');
-  const modalTitle = document.getElementById('modal-title');
-  const modalBody  = document.getElementById('modal-body');
-  const toast      = document.getElementById('toast');
+  const grid          = document.getElementById('grid');
+  const emptyState    = document.getElementById('empty-state');
+  const gridCount     = document.getElementById('grid-count');
+  const statCount     = document.getElementById('stat-count');
+  const statVideos    = document.getElementById('stat-videos');
+  const statGifs      = document.getElementById('stat-gifs');
+  const statImgs      = document.getElementById('stat-imgs');
+  const modal         = document.getElementById('modal');
+  const modalTitle    = document.getElementById('modal-title');
+  const modalBody     = document.getElementById('modal-body');
+  const toast         = document.getElementById('toast');
+  const uploadZone    = document.getElementById('upload-zone');
+  const uploadLabel   = document.getElementById('upload-label');
+  const uploadProgress = document.getElementById('upload-progress');
+  const progressFill  = document.getElementById('progress-fill');
+  const progressLabel = document.getElementById('progress-label');
 
-  // Drag & drop
-  const zone = document.getElementById('upload-zone');
-  zone.addEventListener('dragover',  e => { e.preventDefault(); zone.classList.add('drag-over'); });
-  zone.addEventListener('dragleave', ()  => zone.classList.remove('drag-over'));
-  zone.addEventListener('drop', e => {
+  const STORAGE_KEY = 'border_r6_portfolio_items';
+
+  function saveToStorage() {
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(items)); } catch(e) {}
+  }
+
+  function loadFromStorage() {
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (saved) { items = JSON.parse(saved); renderGrid(); }
+    } catch(e) {}
+  }
+
+  function getType(format, resource_type) {
+    if (resource_type === 'video') return format === 'webm' ? 'webm' : 'mp4';
+    if (format === 'gif') return 'gif';
+    return 'img';
+  }
+
+  // ── DRAG & DROP ──
+  uploadZone.addEventListener('dragover',  e => { e.preventDefault(); uploadZone.classList.add('drag-over'); });
+  uploadZone.addEventListener('dragleave', ()  => uploadZone.classList.remove('drag-over'));
+  uploadZone.addEventListener('drop', e => {
     e.preventDefault();
-    zone.classList.remove('drag-over');
+    uploadZone.classList.remove('drag-over');
     handleFiles(e.dataTransfer.files);
   });
   document.getElementById('file-input').addEventListener('change', e => {
@@ -490,30 +534,82 @@
     e.target.value = '';
   });
 
-  function handleFiles(files) {
-    [...files].forEach(file => {
-      if (!file.type.startsWith('image/') && !file.type.startsWith('video/')) return;
-      const url  = URL.createObjectURL(file);
-      const name = file.name.replace(/\.[^.]+$/, '').replace(/[_-]/g, ' ');
-      let type;
-      if (file.type.startsWith('video/')) {
-        type = file.type.includes('webm') ? 'webm' : 'mp4';
-      } else {
-        type = file.type.includes('gif') ? 'gif' : 'img';
+  async function handleFiles(files) {
+    const fileArr = [...files].filter(f => f.type.startsWith('image/') || f.type.startsWith('video/'));
+    if (!fileArr.length) return;
+
+    uploadZone.classList.add('uploading');
+    uploadProgress.classList.add('active');
+
+    for (let i = 0; i < fileArr.length; i++) {
+      const file = fileArr[i];
+      progressLabel.textContent = `Uploading ${i + 1} of ${fileArr.length}: ${file.name}`;
+      progressFill.style.width = '0%';
+      uploadLabel.textContent = `Uploading ${file.name}...`;
+
+      try {
+        const result = await uploadToCloudinary(file, (pct) => {
+          progressFill.style.width = pct + '%';
+        });
+
+        const type = getType(result.format, result.resource_type);
+        const url = result.resource_type === 'video'
+          ? `https://res.cloudinary.com/${CLOUD_NAME}/video/upload/${result.public_id}.${result.format}`
+          : `https://res.cloudinary.com/${CLOUD_NAME}/image/upload/${result.public_id}.${result.format}`;
+
+        items.push({
+          id: result.public_id,
+          url,
+          name: file.name.replace(/\.[^.]+$/, '').replace(/[_-]/g, ' '),
+          type,
+          resource_type: result.resource_type,
+          format: result.format,
+          public_id: result.public_id
+        });
+
+        renderGrid();
+        saveToStorage();
+      } catch(err) {
+        showToast('Upload failed: ' + err.message, true);
       }
-      const item = {
-        id: Date.now() + '_' + Math.random().toString(36).slice(2),
-        url, name, type, file,
-        desc: 'Click ✎ to add a description.'
-      };
-      items.push(item);
+    }
+
+    uploadZone.classList.remove('uploading');
+    uploadProgress.classList.remove('active');
+    uploadLabel.textContent = 'Drop files here or click to browse';
+    progressFill.style.width = '0%';
+    showToast(`${fileArr.length} file${fileArr.length > 1 ? 's' : ''} uploaded!`);
+  }
+
+  function uploadToCloudinary(file, onProgress) {
+    return new Promise((resolve, reject) => {
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('upload_preset', UPLOAD_PRESET);
+      formData.append('folder', FOLDER);
+
+      const resourceType = file.type.startsWith('video/') ? 'video' : 'image';
+      const xhr = new XMLHttpRequest();
+      xhr.open('POST', `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/${resourceType}/upload`);
+
+      xhr.upload.addEventListener('progress', e => {
+        if (e.lengthComputable) onProgress(Math.round((e.loaded / e.total) * 100));
+      });
+
+      xhr.addEventListener('load', () => {
+        if (xhr.status === 200) {
+          resolve(JSON.parse(xhr.responseText));
+        } else {
+          const err = JSON.parse(xhr.responseText);
+          reject(new Error(err.error?.message || 'Upload failed'));
+        }
+      });
+      xhr.addEventListener('error', () => reject(new Error('Network error')));
+      xhr.send(formData);
     });
-    renderGrid();
-    showToast(`${files.length} file${files.length > 1 ? 's' : ''} added`);
   }
 
   function renderGrid() {
-    // Remove all cards (keep empty state in DOM)
     [...grid.querySelectorAll('.card')].forEach(c => c.remove());
 
     const counts = { videos: 0, gifs: 0, imgs: 0 };
@@ -529,10 +625,7 @@
     statImgs.textContent   = counts.imgs;
     gridCount.textContent  = `${items.length} item${items.length !== 1 ? 's' : ''}`;
 
-    if (items.length === 0) {
-      emptyState.style.display = '';
-      return;
-    }
+    if (items.length === 0) { emptyState.style.display = ''; return; }
     emptyState.style.display = 'none';
 
     items.forEach(item => {
@@ -540,45 +633,37 @@
       card.className = 'card';
       card.dataset.id = item.id;
 
-      // Badge CSS class
       const tbClass = { mp4: 'tb-mp4', webm: 'tb-webm', gif: 'tb-gif', img: 'tb-img' }[item.type];
-      const typeLabel = item.type.toUpperCase();
 
-      // Media
       let mediaInner = '';
       if (item.type === 'mp4' || item.type === 'webm') {
         mediaInner = `<video src="${item.url}" muted loop playsinline preload="metadata"></video>
                       <div class="play-overlay">▶</div>`;
       } else {
         mediaInner = `<img src="${item.url}" alt="${item.name}" loading="lazy" />`;
-        if (item.type === 'gif') {
-          mediaInner += `<div class="play-overlay">GIF</div>`;
-        }
+        if (item.type === 'gif') mediaInner += `<div class="play-overlay">GIF</div>`;
       }
 
       card.innerHTML = `
         <div class="card-media" data-id="${item.id}">
           ${mediaInner}
-          <span class="type-badge ${tbClass}">${typeLabel}</span>
+          <span class="type-badge ${tbClass}">${item.type.toUpperCase()}</span>
         </div>
         <div class="card-body">
           <div class="name-row">
-            <div class="card-name" data-field="name" data-id="${item.id}">${escHtml(item.name)}</div>
-            <button class="icon-btn" data-edit="name" data-id="${item.id}" title="Edit name">✎</button>
+            <div class="card-name" id="name-${item.id}">${escHtml(item.name)}</div>
+            <button class="icon-btn" data-rename="${item.id}" title="Rename">✎</button>
           </div>
-          <div class="card-desc" data-field="desc" data-id="${item.id}">${escHtml(item.desc)}</div>
-          <button class="icon-btn" style="align-self:flex-start;" data-edit="desc" data-id="${item.id}" title="Edit description">✎ Edit description</button>
         </div>
         <div class="card-footer">
+          <button class="btn-sm btn-del" data-delete="${item.id}">Delete</button>
           <button class="btn-sm btn-view" data-preview="${item.id}">Preview</button>
-          <button class="btn-sm btn-del"  data-delete="${item.id}">Remove</button>
         </div>
       `;
 
       grid.appendChild(card);
     });
 
-    // Video hover play
     grid.querySelectorAll('.card-media').forEach(media => {
       const vid = media.querySelector('video');
       if (!vid) return;
@@ -587,48 +672,36 @@
     });
   }
 
-  // Event delegation
   grid.addEventListener('click', e => {
-    // Preview media
     const previewId = e.target.dataset.preview || e.target.closest('[data-preview]')?.dataset.preview;
     if (previewId) { openModal(previewId); return; }
-
-    // Also clicking on the card-media opens preview
     const mediaEl = e.target.closest('.card-media');
     if (mediaEl) { openModal(mediaEl.dataset.id); return; }
 
     // Delete
     const delId = e.target.dataset.delete;
     if (delId) {
+      if (!confirm('Remove this animation from your portfolio?')) return;
       items = items.filter(i => i.id !== delId);
+      saveToStorage();
       renderGrid();
-      showToast('Item removed');
+      showToast('Animation removed');
       return;
     }
 
-    // Edit
-    const editField = e.target.dataset.edit;
-    const editId    = e.target.dataset.id;
-    if (editField && editId) {
-      const el = grid.querySelector(`[data-field="${editField}"][data-id="${editId}"]`);
-      if (!el) return;
-      if (el.contentEditable === 'true') {
-        el.contentEditable = 'false';
-        const item = items.find(i => i.id === editId);
-        if (item) item[editField] = el.textContent.trim() || el.textContent;
-        e.target.textContent = editField === 'name' ? '✎' : '✎ Edit description';
-      } else {
-        el.contentEditable = 'true';
-        el.focus();
-        // Move cursor to end
-        const range = document.createRange();
-        range.selectNodeContents(el);
-        range.collapse(false);
-        const sel = window.getSelection();
-        sel.removeAllRanges();
-        sel.addRange(range);
-        e.target.textContent = editField === 'name' ? '✓' : '✓ Save';
+    // Rename
+    const renameId = e.target.dataset.rename;
+    if (renameId) {
+      const nameEl = document.getElementById('name-' + renameId);
+      if (!nameEl) return;
+      const current = nameEl.textContent;
+      const newName = prompt('Rename animation:', current);
+      if (newName && newName.trim()) {
+        const item = items.find(i => i.id === renameId);
+        if (item) { item.name = newName.trim(); saveToStorage(); }
+        nameEl.textContent = newName.trim();
       }
+      return;
     }
   });
 
@@ -650,32 +723,29 @@
   }
 
   document.getElementById('modal-close-btn').addEventListener('click', () => {
-    modal.classList.remove('active');
-    modalBody.innerHTML = '';
+    modal.classList.remove('active'); modalBody.innerHTML = '';
   });
   modal.addEventListener('click', e => {
-    if (e.target === modal) {
-      modal.classList.remove('active');
-      modalBody.innerHTML = '';
-    }
+    if (e.target === modal) { modal.classList.remove('active'); modalBody.innerHTML = ''; }
   });
   document.addEventListener('keydown', e => {
-    if (e.key === 'Escape') {
-      modal.classList.remove('active');
-      modalBody.innerHTML = '';
-    }
+    if (e.key === 'Escape') { modal.classList.remove('active'); modalBody.innerHTML = ''; }
   });
 
-  function showToast(msg) {
+  function showToast(msg, isError = false) {
     toast.textContent = msg;
+    toast.classList.toggle('error', isError);
     toast.classList.add('show');
     clearTimeout(toast._t);
-    toast._t = setTimeout(() => toast.classList.remove('show'), 2400);
+    toast._t = setTimeout(() => toast.classList.remove('show'), 3000);
   }
 
   function escHtml(str) {
     return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
   }
+
+  // Load existing uploads on page visit
+  loadFromStorage();
 </script>
 </body>
 </html>
